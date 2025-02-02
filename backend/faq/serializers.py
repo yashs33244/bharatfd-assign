@@ -23,20 +23,25 @@ class FAQSerializer(serializers.ModelSerializer):
 
     def get_queryset(self):
         """
-        Get FAQs with optional language filtering and caching
+        Optionally filter by language and use caching
         """
-        lang = self.request.query_params.get("lang", "en")
-        cache_key = f"faqs_{lang}"
+        lang = self.request.query_params.get('language', None)
+        
+        if lang:
+            queryset = FAQ.objects.filter(language=lang).order_by("-created_at")
+        else:
+            queryset = FAQ.objects.all().order_by("-created_at")
 
-        # Try to get from cache
-        cached_queryset = cache.get(cache_key)
-        if cached_queryset is not None:
-            return cached_queryset
+        # Cache the filtered queryset
+        cache_key = f"faqs_{lang}" if lang else "faqs_all"
+        cached_faqs = cache.get(cache_key)
+        if cached_faqs is not None:
+            return cached_faqs
 
-        # If not in cache, get from database
-        queryset = FAQ.objects.all().order_by("-created_at")
-        cache.set(cache_key, queryset, timeout=3600)
+        cache.set(cache_key, queryset, timeout=3600)  # Cache for 1 hour
         return queryset
+
+
 
     def list(self, request, *args, **kwargs):
         """

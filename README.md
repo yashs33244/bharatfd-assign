@@ -98,8 +98,19 @@ curl http://localhost:8000/api/faqs/?lang=bn
 ```bash
 curl -X POST http://localhost:8000/api/faqs/ \
   -H "Content-Type: application/json" \
-  -d '{"question":"What is Django?","answer":"Django is a web framework."}'
+  -d '{"question":"What is Django?","answer":"Django is a web framework.","language":"en"}'
 ```
+
+### GET FAQ
+```bash
+curl http://localhost:8000/api/faqs/1/
+```
+
+### GET ALL FAQ
+```bash
+curl -X GET http://localhost:8000/api/faqs/
+```
+
 
 ## Running Tests
 

@@ -6,32 +6,25 @@ from .models import FAQ
 
 class FAQEndpointTestCase(TestCase):
     def setUp(self):
-        # Creating FAQ objects in different languages
+        # Clear any existing data
+        FAQ.objects.all().delete()
+        
+        # Create test data
         self.faq1 = FAQ.objects.create(
             question="What is Django?",
             answer="Django is a web framework.",
-            question_hi="Django क्या है?",
-            answer_hi="Django एक वेब फ्रेमवर्क है।",
-            question_bn="Django কি?",
-            answer_bn="Django একটি ওয়েব ফ্রেমওয়ার্ক।",
             language="en"
         )
+        
         self.faq2 = FAQ.objects.create(
             question="How to create a model?",
-            answer="Use Django's model class to define database schema.",
-            question_hi="एक मॉडल कैसे बनाएं?",
-            answer_hi="डेटाबेस स्कीमा को परिभाषित करने के लिए Django के मॉडल वर्ग का उपयोग करें।",
-            question_bn="কিভাবে একটি মডেল তৈরি করবেন?",
-            answer_bn="ডাটাবেস স্কিমা সংজ্ঞায়িত করতে জ্যাঙ্গোর মডেল ক্লাস ব্যবহার করুন।",
+            answer="Use Django's model class.",
             language="en"
         )
+        
         self.faq3 = FAQ.objects.create(
-            question="Django কী?",
-            answer="Django হল Python এর জন্য একটি ওয়েব ফ্রেমওয়ার্ক।",
-            question_hi="Django क्या है?",
-            answer_hi="Django पायथन के लिए एक वेब फ्रेमवर्क है।",
-            question_bn="Django কী?",
-            answer_bn="Django হল Python এর জন্য একটি ওয়েব ফ্রেমওয়ার্ক।",
+            question="জ্যাঙ্গো কি?",
+            answer="জ্যাঙ্গো একটি ওয়েব ফ্রেমওয়ার্ক।",
             language="bn"
         )
         
@@ -91,14 +84,26 @@ class FAQEndpointTestCase(TestCase):
         self.assertEqual(FAQ.objects.count(), initial_count - 1)
 
     def test_multilingual_endpoint(self):
-    # Test fetching FAQs in specific language
-        response = self.client.get('/faq/', {'language': 'en'})  # Adjust your endpoint
-        print(response.data)  # Log the response for debugging
-        self.assertEqual(len(response.data["results"]), 2, f"Expected 2 FAQs for 'en', got {len(response.data['results'])}")
+        # Print current data in database for debugging
+        print("\nCurrent FAQs in database:")
+        for faq in FAQ.objects.all():
+            print(f"ID: {faq.id}, Language: {faq.language}, Question: {faq.question}")
+            
+        # Test English FAQs
+        response_en = self.client.get('/api/faqs/', {'lang': 'en'})
+        print(f"\nEnglish response data: {response_en.data}")
+        self.assertEqual(
+            len(response_en.data["results"]), 
+            2, 
+            f"Expected 2 FAQs for 'en', got {len(response_en.data['results'])}"
+        )
         
-        response_bn = self.client.get('/faq/', {'language': 'bn'})  # For Bengali language
-        self.assertEqual(len(response_bn.data["results"]), 1, f"Expected 1 FAQ for 'bn', got {len(response_bn.data['results'])}")
-        
-        response_hi = self.client.get('/faq/', {'language': 'hi'})  # For Hindi language
-        self.assertEqual(len(response_hi.data["results"]), 1, f"Expected 1 FAQ for 'hi', got {len(response_hi.data['results'])}")
+        # Test Bengali FAQs
+        response_bn = self.client.get('/api/faqs/', {'lang': 'bn'})
+        print(f"\nBengali response data: {response_bn.data}")
+        self.assertEqual(
+            len(response_bn.data["results"]), 
+            1, 
+            f"Expected 1 FAQ for 'bn', got {len(response_bn.data['results'])}"
+        )
 

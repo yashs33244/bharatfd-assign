@@ -9,25 +9,34 @@ class FAQ(models.Model):
     """
     Multilingual FAQ model with dynamic translation support.
     """
-    # Adding language field with choices
-    language = models.CharField(
-        _("Language"),
-        max_length=10,
-        choices=[("en", "English"), ("hi", "Hindi"), ("bn", "Bengali")],
-        default="en"
-    )
-    question = models.CharField(max_length=255)
+    language = models.CharField(max_length=10)  # or use a choice field for languages
+    question = models.TextField()
     answer = models.TextField()
-    
-    # Multilingual fields
-    question_hi = models.CharField(max_length=255, blank=True)
-    answer_hi = models.TextField(blank=True)
-    
-    question_bn = models.CharField(max_length=255, blank=True)
-    answer_bn = models.TextField(blank=True)
-    
+    question_hi = models.TextField(null=True, blank=True)
+    answer_hi = models.TextField(null=True, blank=True)
+    question_bn = models.TextField(null=True, blank=True)
+    answer_bn = models.TextField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    # Adding language field with choices
+    # language = models.CharField(
+    #     _("Language"),
+    #     max_length=10,
+    #     choices=[("en", "English"), ("hi", "Hindi"), ("bn", "Bengali")],
+    #     default="en"
+    # )
+    # question = models.CharField(max_length=255)
+    # answer = models.TextField()
+    
+    # # Multilingual fields
+    # question_hi = models.CharField(max_length=255, blank=True)
+    # answer_hi = models.TextField(blank=True)
+    
+    # question_bn = models.CharField(max_length=255, blank=True)
+    # answer_bn = models.TextField(blank=True)
+    
+    # created_at = models.DateTimeField(auto_now_add=True)
+    # updated_at = models.DateTimeField(auto_now=True)
 
     def save(self, *args, **kwargs):
         """
