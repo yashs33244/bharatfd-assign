@@ -85,13 +85,13 @@ docker-compose up --build
 ### List FAQs
 ```bash
 # English (default)
-curl http://localhost:8000/api/faqs/
+curl https://bharatfd.yashprojects.online/api/faqs/
 
 # Hindi
-curl http://localhost:8000/api/faqs/?lang=hi
+curl https://bharatfd.yashprojects.online/api/faqs/?lang=hi
 
 # Bengali
-curl http://localhost:8000/api/faqs/?lang=bn
+curl https://bharatfd.yashprojects.online/api/faqs/?lang=bn
 ```
 
 ### Create FAQ
@@ -99,16 +99,21 @@ curl http://localhost:8000/api/faqs/?lang=bn
 curl -X POST http://localhost:8000/api/faqs/ \
   -H "Content-Type: application/json" \
   -d '{"question":"What is Django?","answer":"Django is a web framework.","language":"en"}'
+
+curl -X POST https://bharatfd.yashprojects.online//api/faqs/ \
+  -H "Content-Type: application/json" \
+  -d '{"question":"What is Django?","answer":"Django is a web framework.","language":"en"}'
 ```
 
 ### GET FAQ
 ```bash
 curl http://localhost:8000/api/faqs/1/
+curl https://bharatfd.yashprojects.online/api/faqs/1/
 ```
 
 ### GET ALL FAQ
 ```bash
-curl -X GET http://localhost:8000/api/faqs/
+curl -X GET https://bharatfd.yashprojects.online/api/faqs/
 ```
 
 
